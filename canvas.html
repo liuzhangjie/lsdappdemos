@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+</head>
+<body>
+	<canvas id="myCanvas" width="1250" height="100" style="border:5px solid #c3c3c3;"></canvas>
+<script>
+	window.onload = function(){
+		var canvas = document.getElementById("myCanvas");//找到画布
+		var ctx = canvas.getContext("2d");//获得对象
+		ctx.fillStyle = "#40B3DF";//设置对象颜色
+		ctx.fillRect(2,4,60,80);//画数据一柱状图
+		ctx.font = "30px Arial";//设置字体
+		ctx.fillText("my data 1", xx1, yy1);//在哪个坐标位置写什么东西
+	}
+
+
+
+
+
+
+
+
+	 //画坐标点
+    var yNumber = 5;                                                // y轴的段数
+    var yLength = Math.floor((height - padding * 2) / yNumber);     // y轴每段的真实长度
+    var xLength = Math.floor((width - padding * 2) / data.length);  // x轴每段的真实长度
+
+    ctx.beginPath();
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#40B3DF';
+    ctx.strokeStyle = '#40B3DF';
+    // x轴刻度和值
+    for (var i = 0; i < data.length; i++) {
+    var xAxis = data[i].xAxis;
+    var xlen = xLength * (i + 1);
+    ctx.moveTo(padding + xlen, height - padding);
+    ctx.lineTo(padding + xlen, height - padding + 5);
+    ctx.stroke();                                       // 画轴线上的刻度
+    ctx.fillText(xAxis, padding + xlen - xLength / 2, height - padding + 15);   // 填充文字
+    }
+    // y轴刻度和值
+    for (var i = 0; i < yNumber; i++) {
+    var y = yFictitious * (i + 1);
+    var ylen = yLength * (i + 1);
+    ctx.moveTo(padding, height - padding - ylen);
+    ctx.lineTo(padding - 5, height - padding - ylen);
+    ctx.stroke();
+    ctx.fillText(y, padding - 10, height - padding - ylen + 5);
+
+
+
+
+        /*三 画柱状动画*/
+    function looping() {
+    looped = requestAnimationFrame(looping);
+    if(current < 100)
+    {      
+    // current 用来计算当前柱状的高度占最终高度的百分之几，通过不断循环实现柱状上升的动画
+        current = (current + 3) > 100 ? 100 : (current + 3);
+        drawAnimation();
+    }
+    else
+    {
+        window.cancelAnimationFrame(looped);
+        looped = null;
+    }
+    }
+
+    function drawAnimation() {
+    for(var i = 0; i < data.length; i++) {
+        var x = Math.ceil(data[i].value * current / 100 * yRatio);
+        var y = height - padding - x;
+        ctx.fillRect(padding + xLength * (i + 0.25), y, xLength/2, x);
+        // 保存每个柱状的信息
+        data[i].left = padding + xLength / 4 + xLength * i;
+        data[i].top = y;
+        data[i].right = padding + 3 * xLength / 4 + xLength * i;
+        data[i].bottom = height - padding;
+        }
+    }
+    
+    looping();
+</script>
+</body>
+</html>
+
+
+
